@@ -46,7 +46,7 @@ public class login{
 						      int count = rs.getInt(1);
 						      System.out.println(count);
 						     
-					 if(count<12) {
+					 if(count<14) {
 					 
 						System.out.println("Enter customername:");
 				 		String cname = sc.next();
