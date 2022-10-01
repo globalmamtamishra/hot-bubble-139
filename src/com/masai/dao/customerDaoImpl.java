@@ -4,7 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import com.masai.bean.Bus;
 import com.masai.bean.customer;
 import com.masai.exception.customerexception;
 import com.masai.utility.DBUtil;
@@ -14,12 +19,8 @@ public class customerDaoImpl implements customerDao{
 
 	@Override
 		public String registerCustomer(int id,String name, String email, String pass, String mob, String add) {
-		
 			String message = "Not Inserted..";
 		
-			
-		
-			
 			try(Connection conn= DBUtil.provideConnection()) {
 				
 				   PreparedStatement ps = conn.prepareStatement("insert into Customer values(?,?,?,?,?,?)");
@@ -38,19 +39,44 @@ public class customerDaoImpl implements customerDao{
 					message = "Customer Registered Sucessfully !";
 				
 				
-				
 			} catch (SQLException e) {
 				message = e.getMessage();
 			}
-			
-			
-		
-		
-			
 			return message;
 		}
 
 	
+	
+	public String registeBus(int bid, String bname, String broute, String btype, int seat, String atime, String dtime, String date) {
+		
+			String message = "Not Inserted..";
+		
+			try(Connection conn= DBUtil.provideConnection()){
+				
+				 PreparedStatement ps = conn.prepareStatement("insert into Bus values(?,?,?,?,?,?,?,?)");
+
+		            ps.setInt(1, bid);
+		            ps.setString(2, bname);
+		            ps.setString(3, broute);
+		            ps.setString(4, btype);
+		            ps.setInt(5, seat);
+		            ps.setString(6, atime);
+		            ps.setString(7, dtime);
+		            ps.setString(8, date);
+
+		        	int x= ps.executeUpdate();
+					
+					
+					if(x > 0)
+						message = "bus Registered Sucessfully !";
+					
+					
+				} catch (SQLException e) {
+					message = e.getMessage();
+				}
+				return message;
+		        
+			}
 				
 	
 //		@Override
@@ -135,8 +161,6 @@ public class customerDaoImpl implements customerDao{
 					throw new customerexception("Invalid Username or password.. ");
 				
 				
-				
-				
 			} catch (SQLException e) {
 				throw new customerexception(e.getMessage());
 			}
@@ -144,56 +168,52 @@ public class customerDaoImpl implements customerDao{
 	return student;	
 		}
 
-//		@Override
-//		public List<Student> getAllStudentDetails() throws StudentException {
-//			
-//			List<Student> students= new ArrayList<>();
-//			
-//			
-//			try(Connection conn= DBUtil.provideConnection()) {
-//				
-//				PreparedStatement ps= conn.prepareStatement("select * from student");
-//				
-//				
-//				
-//				ResultSet rs= ps.executeQuery();
-//				
-//				while(rs.next()) {
-//					
-//					
-//					int r= rs.getInt("roll");
-//					String n= rs.getString("name");
-//					int m= rs.getInt("marks");
-//					String e= rs.getString("email");
-//					String p= rs.getString("password");
-//					
-//					
-//				Student student=new Student(r, n, m, e, p);	
-//					
-//				students.add(student);
-//					
-//					
-//					
-//				}
-//				
-//				
-//				
-//				
-//				
-//			} catch (SQLException e) {
-//				throw new StudentException(e.getMessage());
-//			}
-//			
-//			
-//			if(students.size() == 0)
-//				throw new StudentException("No Student found..");
-//			
+		@Override
+		public List<Bus> getAllBusDetails() throws Exception {
+			
+			List<Bus> bus =  new ArrayList<>();
 			
 			
-//			
-//			return students;
-//		}
-//
+			try(Connection conn= DBUtil.provideConnection()) {
+				
+				PreparedStatement ps= conn.prepareStatement("select * from Bus");
+				
+				
+				
+				ResultSet rs= ps.executeQuery();
+				
+				while(rs.next()) {
+					
+					
+					int bn= rs.getInt("busNo");
+					String n= rs.getString("busName");
+					String r= rs.getString("busRoute");
+					String t= rs.getString("busType");
+					int s= rs.getInt("seat");
+					String dt= rs.getString("departuretime");
+					String at= rs.getString("arrivalTime");
+					String d= rs.getString("date");
+					
+					
+				Bus b =new Bus(bn, n, r, t, s, dt, at, d);
+					
+				bus.add(b);
+			
+				}
+				
+			} catch (SQLException e) {
+				throw new Exception(e.getMessage());
+			}
+			
+			
+			if(bus.size() == 0)
+				throw new Exception("No bus found..");
+				
+			return bus;
+		}
+		
+	
+
 //		@Override
 //		public String registerStudentInsideACourse(int cid, int roll) throws StudentException, CourseException {
 //			
@@ -202,7 +222,7 @@ public class customerDaoImpl implements customerDao{
 //		
 //				try(Connection conn= DBUtil.provideConnection()) {
 //					
-//				 	PreparedStatement ps= conn.prepareStatement("select * from student where roll =?");
+//				 	PreparedStatement ps= conn.prepareStatement("select * from customer where cid =?");
 //					
 //				 	
 //				 	ps.setInt(1, roll);
@@ -211,8 +231,8 @@ public class customerDaoImpl implements customerDao{
 //					
 //				 	if(rs.next()) {
 //				 		
-//				 		PreparedStatement ps2= conn.prepareStatement("select * from course where cid=?");
-				 		
+//				 		PreparedStatement ps2= conn.prepareStatement("select * from bus where busNo =?");
+//				 		
 //				 		ps2.setInt(1, cid);
 //
 //				 		ResultSet rs2= ps2.executeQuery();
@@ -231,38 +251,21 @@ public class customerDaoImpl implements customerDao{
 //				 			if(x > 0)
 //				 				message = "Student registered inside the Course Sucessfully.. ";
 //				 			else
-//				 				throw new StudentException("Techical error..");
-//				 			
-//				 			
-//				 			
+//				 				throw new Exception("Techical error..");
 //				 		}
 //				 		else
-//				 			throw new CourseException("Invalid Course...");
-//				 		
-//				 		
-//				 		
+//				 			throw new Exception("Invalid Course...");
 //				 		
 //				 	}else
-//				 		throw new StudentException("Invalid Student...");
-//					
-//					
-//					
-//					
-//					
+//				 		throw new Exception("Invalid Student...");	
 //					
 //				} catch (SQLException e) {
-//					throw new StudentException(e.getMessage());
+//					throw new Exception(e.getMessage());
 //				}
-//				
-//				
-//				
-//		
-//				
-//				
 //				
 //				return message;
 //		}
-//
+
 //		@Override
 //		public List<StudentDTO> getAllStudentsByCname(String cname) throws CourseException {
 //			
