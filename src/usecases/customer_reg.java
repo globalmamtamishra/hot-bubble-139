@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import com.masai.dao.customerDao;
 import com.masai.dao.customerDaoImpl;
+import com.masai.utility.login;
 
 public class customer_reg {
 	
@@ -30,6 +31,12 @@ public class customer_reg {
 		
 		
 		System.out.println(result);
+		
+		if(result=="Customer Registered Sucessfully !") {
+			login.main(args);
+		}
+		
+		
 
 	}
 

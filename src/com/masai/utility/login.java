@@ -27,10 +27,19 @@ public class login{
 			String pass = sc.next();
 			customerDao dao = new customerDaoImpl();
 			
+			
+			
 			try {
 				customer student= dao.loginCustomer(uname, pass);
 			
 		 		System.out.println("Welcome customer :"+student.getName());
+		 		
+		 		System.out.println("1 : book ticket");
+				System.out.println("2 : View Ticket");
+				
+				int ab = sc.nextInt();
+				if(ab==1) {
+				
 		 		String message = "Not booked..";
 				
 				try(Connection conn= DBUtil.provideConnection()) {
@@ -73,6 +82,15 @@ public class login{
 				 		}
 				} catch (SQLException e) {
 					message = e.getMessage();
+				}
+			}
+				else if(ab==2) {
+					viewTickets.main(args);
+					
+					
+				}
+				else {
+					System.out.println("wrong input!");
 				}
 					
 			}catch (Exception e) {

@@ -11,8 +11,10 @@ import java.util.Map;
 
 import com.masai.bean.Bus;
 import com.masai.bean.customer;
+import com.masai.bean.ticket;
 import com.masai.exception.customerexception;
 import com.masai.utility.DBUtil;
+import com.masai.utility.login;
 
 public class customerDaoImpl implements customerDao{
 
@@ -37,6 +39,8 @@ public class customerDaoImpl implements customerDao{
 				
 				if(x > 0)
 					message = "Customer Registered Sucessfully !";
+				
+			
 				
 				
 			} catch (SQLException e) {
@@ -208,6 +212,45 @@ public class customerDaoImpl implements customerDao{
 			
 			if(bus.size() == 0)
 				throw new Exception("No bus found..");
+				
+			return bus;
+		}
+		
+public List<ticket> tickerDetails() throws Exception {
+			
+			List<ticket> bus =  new ArrayList<>();
+			
+			
+			try(Connection conn= DBUtil.provideConnection()) {
+				
+				PreparedStatement ps= conn.prepareStatement("select * from delexp");
+				
+				
+				
+				ResultSet rs= ps.executeQuery();
+				
+				while(rs.next()) {
+					
+					
+					int seat= rs.getInt("seat");
+					String n= rs.getString("cname");
+					String m= rs.getString("mobile");
+					
+					
+					
+				ticket b =new ticket(seat, n, m);
+					
+				bus.add(b);
+			
+				}
+				
+			} catch (SQLException e) {
+				throw new Exception(e.getMessage());
+			}
+			
+			
+			if(bus.size() == 0)
+				throw new Exception("No Ticket found..");
 				
 			return bus;
 		}

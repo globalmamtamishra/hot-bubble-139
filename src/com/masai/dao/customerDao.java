@@ -3,6 +3,7 @@ package com.masai.dao;
 import java.util.List;
 import com.masai.bean.Bus;
 import com.masai.bean.customer;
+import com.masai.bean.ticket;
 import com.masai.exception.customerexception;
 
 
@@ -17,5 +18,7 @@ public interface customerDao {
 	public String registeBus(int bid, String bname, String broute, String btype, int seat, String atime, String dtime, String date);
 	
 	public List<Bus> getAllBusDetails()throws Exception;
+	
+	public List<ticket> tickerDetails() throws Exception;
 
 }
